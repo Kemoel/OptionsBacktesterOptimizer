@@ -1,0 +1,17 @@
+name: trading
+channels:
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy
+  - toolz
+  - matplotlib
+  - dill
+  - pandas
+  - pandas-datareader
+  - seaborn
+  - partd
+  - bokeh
+  - pip:
+    - yfinance
+    - ibapi
