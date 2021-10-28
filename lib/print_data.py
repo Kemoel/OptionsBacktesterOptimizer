@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import seaborn as sns
 
-def prt_grph(data, tckr, strt_dt, end_dt, prc, sma, ema, bb, kc, sma1, sma2, ema1, bb_upr, bb_lwr, kc_upr, kc_lwr):
+def prt_grph_sns(data, tckr, strt_dt, end_dt, prc, sma, ema, bb, kc, sma1, sma2, ema1, bb_upr, bb_lwr, kc_upr, kc_lwr):
     sns.set(style='darkgrid',context='talk',palette='Dark2')
     dt_frmt = mdates.DateFormatter('%m/%y')
     fig, ax = plt.subplots(figsize=(16,9))
