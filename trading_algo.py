@@ -32,8 +32,7 @@ sqz_sig = sqz(data, bb_upr, bb_lwr, kc_upr, kc_lwr)
 # Buy/sell signal based on previously specified simple moving averages.
 bs_sig = bs_rng(data, spec_data, sma1, sma2)
 
-trade_enter(data, momentum, sqz_sig, bs_sig)
-trade_exit(data, spec_data, sma1, sma2)
+# Strategy entry exit calculations dataframe.
 trd_data = trade_strat(data, spec_data, sma1, sma2, momentum, sqz_sig, bs_sig)
 
 # Account value dataframe solved for specified dates.
@@ -49,4 +48,4 @@ acnt_end_val_std_p = acnt_end_std(acnt_val_data)
 shrp_rt = shrp_ratio(acnt_end_val_p, ref_return_val_p, acnt_end_val_std_p)
 
 # Graph out all required indicators.
-# prt_grph(data, tckr, strt_dt, end_dt, True, True, True, True, True, sma1, sma2, ema1, bb_upr, bb_lwr, kc_upr, kc_lwr)
+prt_grph(data, tckr, strt_dt, end_dt, True, True, True, True, True, sma1, sma2, ema1, bb_upr, bb_lwr, kc_upr, kc_lwr)
