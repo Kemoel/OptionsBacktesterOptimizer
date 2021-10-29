@@ -9,15 +9,11 @@ data_src = 'csv'
 data_strt_dt = '2000-01-01'
 # Data end date.
 data_end_dt = '2021-10-10'
-
 # Data column to use for calculations. options: 'Open', 'Close', 'High', 'Low', and 'Adj Close'.
 spec_data = 'Adj Close'
 
 # Refrence/market compare ticker. options: 'risk free', 'SPY', 'QQQ', 'DIA', and 'IWM'.
 ref_tckr = 'risk free'
-# Days per year for interest calculation.
-d_per_y = 365
-
 # Risk free interest rate per year.
 rf_i = 0.02
 # Risk free interest times compounding period year.
@@ -29,3 +25,6 @@ strt_blnc = 1000
 strt_dt = '2019-01-01'
 # End date for testing.
 end_dt = '2021-01-01'
+
+# Days per year for interest calculation.
+d_per_y = 365

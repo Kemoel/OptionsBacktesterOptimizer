@@ -29,6 +29,6 @@ def prt_grph_sns(data, tckr, strt_dt, end_dt, prc, sma, ema, bb, kc, sma1, sma2,
     return
 
 def print_all(data):
-    with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+    with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # More options can be specified also
         print(data)
     return
