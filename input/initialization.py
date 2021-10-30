@@ -1,5 +1,3 @@
-import pandas as pd
-from lib.import_data import get_data
 
 # Ticker name all caps.
 tckr = 'SPY'

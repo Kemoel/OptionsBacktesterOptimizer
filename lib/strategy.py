@@ -1,3 +1,4 @@
+from input.initialization import *
 from lib.print_data import *
 from lib.indicators import *
 import pandas as pd
@@ -10,17 +11,17 @@ def trade_enter(data, momentum, sqz_sig, bs_sig):
     enter_data.at[(momentum['momentum'] < 0) & (sqz_sig['sqz signal'] == 1) & (bs_sig['bs signal'] < 0), 'enter signal'] = -1 # Short
     return enter_data
 
-def trade_exit(data, spec_data, sma1, sma2):
-    kc_upr_lim = kc(data, spec_data, 'upr', 21, 21, 3)
-    kc_lwr_lim = kc(data, spec_data, 'low', 21, 21, 3)
+def trade_exit(data, sma1, sma2, spec_data=spec_data):
+    kc_upr_lim = kc(data, 'upr', 21, 21, 3)
+    kc_lwr_lim = kc(data, 'low', 21, 21, 3)
     exit_data = pd.DataFrame(index = data.index, columns = ['exit signal']).fillna(0)
     exit_data.at[(data[spec_data] > kc_upr_lim['kc']) | ((sma1['sma'] > sma2['sma']) & (data[spec_data] < sma2['sma'])), 'exit signal'] = 1 # Long gain and loss
     exit_data.at[(data[spec_data] < kc_lwr_lim['kc']) | ((sma1['sma'] < sma2['sma']) & (data[spec_data] > sma2['sma'])), 'exit signal'] = -1 # Short gain and loss
     return exit_data
 
-def trade_strat(data, spec_data, sma1, sma2, momentum, sqz_sig, bs_sig):
+def trade_strat(data, sma1, sma2, momentum, sqz_sig, bs_sig):
     trd_entr = trade_enter(data, momentum, sqz_sig, bs_sig)
-    trd_ext = trade_exit(data, spec_data, sma1, sma2)
+    trd_ext = trade_exit(data, sma1, sma2)
     trade_data = pd.DataFrame(index = data.index, columns = ['trade enter price' ,'trade exit price', 'trade loc/typ', 'trade value']).fillna(0)
     trade_data.at[trd_entr['enter signal'] == 1, 'trade enter price'] = data['Adj Close'] * (1) # Long
     trade_data.at[trd_entr['enter signal'] == -1, 'trade enter price'] = data['Adj Close'] * (-1) # Short
