@@ -1,7 +1,7 @@
-import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import seaborn as sns
+import pandas as pd
 
 def prt_grph_sns(data, tckr, strt_dt, end_dt, prc, sma, ema, bb, kc, sma1, sma2, ema1, bb_upr, bb_lwr, kc_upr, kc_lwr):
     sns.set(style='darkgrid',context='talk',palette='Dark2')
