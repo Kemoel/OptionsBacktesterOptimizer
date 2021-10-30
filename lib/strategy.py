@@ -39,8 +39,4 @@ def trade_strat(data, spec_data, sma1, sma2, momentum, sqz_sig, bs_sig):
             trd_flg = 0
     # Trade value: open long -, close long +, open short +, close short -.
     trade_data['trade value'] = ((trade_data['trade loc/typ'] * trade_data['trade enter price']) + (trade_data['trade loc/typ'] * trade_data['trade exit price'])) * (-1)
-    # If trades open and close are not equal, then quit. 
-    if (trade_data['trade loc/typ'].sum() != 0):
-        print('Total number of trades is no balaned open and close: quiting program thanks')
-        quit()
     return trade_data
