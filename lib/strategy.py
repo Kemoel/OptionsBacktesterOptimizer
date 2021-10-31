@@ -27,15 +27,23 @@ def trade_strat(data, sma1, sma2, momentum, sqz_sig, bs_sig):
     trade_data.at[trd_entr['enter signal'] == -1, 'trade enter price'] = data['Adj Close'] * (-1) # Short
     trade_data.at[trd_ext['exit signal'] == 1, 'trade exit price'] = data['Adj Close'] * (1) # Long
     trade_data.at[trd_ext['exit signal'] == -1, 'trade exit price'] = data['Adj Close'] * (-1) # Short
-    trd_flg = 0
+    trd_flg = 0 # In trade long 1. In short -1.
     # Trade loc/typ: open long/short +, close long/short -.
     for row in trade_data.itertuples():
-        # Long/short trade open.
-        if ((row._1 != 0) & (trd_flg == 0)):
+        # Long trade open.
+        if ((row._1 > 0) & (trd_flg == 0)):
             trade_data.at[row.Index, 'trade loc/typ'] = 1
             trd_flg = 1
-        # Long/short trade close.
-        if ((row._2 != 0) & (trd_flg == 1)):
+        # Long trade close.
+        if ((row._2 > 0) & (trd_flg == 1)):
+            trade_data.at[row.Index, 'trade loc/typ'] = -1
+            trd_flg = 0
+        # Short trade open.
+        if ((row._1 < 0) & (trd_flg == 0)):
+            trade_data.at[row.Index, 'trade loc/typ'] = 1
+            trd_flg = -1
+        # Short trade close.
+        if ((row._2 < 0) & (trd_flg == -1)):
             trade_data.at[row.Index, 'trade loc/typ'] = -1
             trd_flg = 0
     # Trade value: open long -, close long +, open short +, close short -.

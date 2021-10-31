@@ -48,4 +48,4 @@ acnt_end_val_std = acnt_end_std(acnt_val_data)
 shrp_rt = shrp_ratio(acnt_end_val_p, ref_return_val_p, acnt_end_val_std)
 
 # Graph out all required indicators.
-# prt_grph_sns(data, tckr, strt_dt, end_dt, True, True, True, True, True, sma1, sma2, ema1, bb_upr, bb_lwr, kc_upr, kc_lwr)
+prt_grph(data, acnt_val_data, sma1, sma2, ema1, bb_upr, bb_lwr, kc_upr, kc_lwr)

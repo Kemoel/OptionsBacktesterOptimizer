@@ -1,3 +1,4 @@
+from numpy import sign
 from input.initialization import *
 from lib.import_data import *
 from lib.print_data import *
@@ -19,7 +20,7 @@ def ref_rtrn(ref_tckr_i, strt_dt=strt_dt, end_dt=end_dt):
 
 # Trade value dataframe with starting balance for dates specified.
 def acnt_val(data, trd_data, strt_dt=strt_dt, end_dt=end_dt, end_open_pos_flg=0):
-    account_value = pd.DataFrame(index = (trd_data.loc[strt_dt:end_dt].index), columns = ['trade value', 'cash value', 'position value', 'account value']).fillna(0)
+    account_value = pd.DataFrame(index = (trd_data.loc[strt_dt:end_dt].index), columns = ['trade value', 'cash balance', 'position value', 'account value']).fillna(0)
     account_value['trade value'] = trd_data['trade value']
     account_value.iat[0,1] = strt_blnc
     # Open dates list.
@@ -36,30 +37,29 @@ def acnt_val(data, trd_data, strt_dt=strt_dt, end_dt=end_dt, end_open_pos_flg=0)
         open_dt = open_dt.drop(open_dt.index[-1])
     # Cumalitive addition of trades and profit/loss.
     account_value = acnt_val_cumsum_max(data, account_value)
-    print_all(account_value)
     return account_value
 
 # Cumalitave addition on trade gain and loss. Maximized contracts.
 def acnt_val_cumsum_max(data, account_value):
-    account_value['cash value'] += account_value['trade value']
+    account_value['cash balance'] += account_value['trade value']
     num_contract = 0
     for i in range(1,len(account_value)):
         # Opening trade
-        if ((account_value.iat[i,1] != 0) & (num_contract == 0)):
-            num_contract = account_value.iat[i-1,1] // abs(account_value.iat[i,1])
+        if ((account_value.iat[i,0] != 0) & (num_contract == 0)):
+            num_contract = abs(account_value.iat[i-1,1] // abs(account_value.iat[i,0]))
+            account_value.iat[i,1] = account_value.iat[i-1,1] - (account_value.iat[i,0] * num_contract * (-1))
             account_value.iat[i,2] = account_value.iat[i,0] * num_contract * (-1)
-            account_value.iat[i,1] = (account_value.iat[i,1] * num_contract) + account_value.iat[i-1,1]
         # Closing trade
-        elif ((account_value.iat[i,1] != 0) & (num_contract != 0)):
+        elif ((account_value.iat[i,0] != 0) & (num_contract != 0)):
+            account_value.iat[i,1] = account_value.iat[i-1,1] + (account_value.iat[i,0] * num_contract)
             account_value.iat[i,2] = 0
-            account_value.iat[i,1] = (account_value.iat[i,1] * num_contract) + account_value.iat[i-1,1]
             num_contract = 0
         # No trade
         else :
             if (num_contract != 0):
-                account_value.iat[i,2] = data.loc[account_value.iloc[i].name,'Adj Close'] * (num_contract)
+                account_value.iat[i,2] = data.loc[account_value.iloc[i].name,'Adj Close'] * num_contract * sign(account_value.iat[i-1,2])
             account_value.iat[i,1] = account_value.iat[i-1,1]
-    account_value['account value'] = account_value['cash value'] + account_value['position value']    
+    account_value['account value'] = account_value['cash balance'] + account_value['position value']
     return account_value
 
 # Account perecent return for specified dates.
