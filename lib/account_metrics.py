@@ -1,8 +1,8 @@
 from input.initialization import *
 from lib.import_data import *
 from lib.print_data import *
-from numpy import sign
-import time
+from lib.options import *
+import numpy as np
 
 # Ticker percent return for specified dates.
 def rtrn_p(tckr, strt_dt=strt_dt, end_dt=end_dt):
@@ -37,19 +37,24 @@ def acnt_val(data, trd_data, strt_dt=strt_dt, end_dt=end_dt, end_open_pos_flg=0)
         account_value.at[open_dt.index[-1],'stock price'] = 0
         open_dt = open_dt.drop(open_dt.index[-1])
     # Cumalitive addition of trades and profit/loss. Fast and slow options availible.
-    account_value = acnt_val_cumsum_max_fast(data, spec_data, account_value)
-    return account_value
+    # account_value_full, num_trds = acnt_val_cumsum_max_fast(data, spec_data, account_value)
+
+    account_value_full, num_trds = acnt_val_cumsum_max_options(data, spec_data, account_value)
+
+    # print_all(account_value)
+    return account_value_full, num_trds
 
 # Cumalitave addition on trade gain and loss. Maximized contracts. Slower dataframe code.
 def acnt_val_cumsum_max(data, spec_data, account_value):
-    account_value['cash balance'] += account_value['stock price']
     num_contract = 0
+    num_trds = 0
     for i in range(1,len(account_value)):
         # Opening trade
         if ((account_value.iat[i,0] != 0) & (num_contract == 0)):
             num_contract = abs(account_value.iat[i-1,1] // abs(account_value.iat[i,0]))
             account_value.iat[i,1] = account_value.iat[i-1,1] - (account_value.iat[i,0] * num_contract * (-1))
             account_value.iat[i,2] = account_value.iat[i,0] * num_contract * (-1)
+            num_trds +=1
         # Closing trade
         elif ((account_value.iat[i,0] != 0) & (num_contract != 0)):
             account_value.iat[i,1] = account_value.iat[i-1,1] + (account_value.iat[i,0] * num_contract)
@@ -58,15 +63,14 @@ def acnt_val_cumsum_max(data, spec_data, account_value):
         # No trade
         else :
             if (num_contract != 0):
-                account_value.iat[i,2] = data.loc[account_value.iloc[i].name,spec_data] * num_contract * sign(account_value.iat[i-1,2])
+                account_value.iat[i,2] = data.loc[account_value.iloc[i].name,spec_data] * num_contract * np.sign(account_value.iat[i-1,2])
             account_value.iat[i,1] = account_value.iat[i-1,1]
     account_value['account value'] = account_value['cash balance'] + account_value['position value']
-    return account_value
+    return account_value, num_trds
 
 
 # Cumalitave addition on trade gain and loss. Maximized contracts. Faster array code.
 def acnt_val_cumsum_max_fast(data_df, spec_data, account_value_df):
-    account_value_df['cash balance'] += account_value_df['stock price']
     # Dataframe to numpy array for speed.
     account_value_arr = account_value_df.to_numpy()
     data_arr = data_df.to_numpy()
@@ -77,12 +81,14 @@ def acnt_val_cumsum_max_fast(data_df, spec_data, account_value_df):
     csh_blc_idx = account_value_df.columns.get_loc('cash balance')
     pos_val_idx = account_value_df.columns.get_loc('position value')
     num_contract = 0   
+    num_trds = 0
     for i in range(1,len(account_value_arr)):
         # Opening trade
         if ((account_value_arr[i,stk_prc_idx] != 0) & (num_contract == 0)):
             num_contract = abs(account_value_arr[i-1,csh_blc_idx] // abs(account_value_arr[i,stk_prc_idx]))
             account_value_arr[i,csh_blc_idx] = account_value_arr[i-1,csh_blc_idx] - (account_value_arr[i,stk_prc_idx] * num_contract * (-1))
             account_value_arr[i,pos_val_idx] = account_value_arr[i,stk_prc_idx] * num_contract * (-1)
+            num_trds +=1
         # Closing trade
         elif ((account_value_arr[i,stk_prc_idx] != 0) & (num_contract != 0)): 
             account_value_arr[i,csh_blc_idx] = account_value_arr[i-1,csh_blc_idx] + (account_value_arr[i,stk_prc_idx] * num_contract)
@@ -91,16 +97,17 @@ def acnt_val_cumsum_max_fast(data_df, spec_data, account_value_df):
         # No trade
         else :
             if (num_contract != 0):
-                account_value_arr[i,pos_val_idx] = data_arr[data_strt_dt_idx+i,spec_data_idx] * num_contract * sign(account_value_arr[i-1,pos_val_idx])
+                account_value_arr[i,pos_val_idx] = data_arr[data_strt_dt_idx+i,spec_data_idx] * num_contract * np.sign(account_value_arr[i-1,pos_val_idx])
             account_value_arr[i,csh_blc_idx] = account_value_arr[i-1,csh_blc_idx]
     account_value_df = pd.DataFrame(data = account_value_arr, index = account_value_df.index, columns = account_value_df.columns)
     account_value_df['account value'] = account_value_df['cash balance'] + account_value_df['position value']
-    return account_value_df
+    return account_value_df, num_trds
 
 # Account perecent return for specified dates.
 def acnt_end_p(acnt_val_data):
-    acnt_end_val_p = acnt_val_data.iat[-1,3] / strt_blnc - 1
-    return acnt_end_val_p
+    acnt_end_val_p = acnt_val_data.iat[-1,acnt_val_data.columns.get_loc('account value')]/strt_blnc-1
+    acnt_end_val_year_p = (acnt_end_val_p+1)**(1/((pd.to_datetime(end_dt)-pd.to_datetime(strt_dt)).days/365))-1
+    return acnt_end_val_p, acnt_end_val_year_p 
 
 # Account return standard deviation for specified days.
 def acnt_end_std(acnt_val_data):

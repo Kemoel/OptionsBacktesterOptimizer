@@ -21,6 +21,10 @@ bb_std_mul_ini = 2
 kc_sma_ln_ini = 3
 kc_atr_ln_ini = 13
 kc_atr_mul_ini = 1.5
+# KC sma length, atr length, and atr multiplier. For strat exit.
+kc_sma_ln_exit = 3
+kc_atr_ln_exit = 14
+kc_atr_mul_exit = 3
 # Momentum length.
 momemtum_ln_ini = 9
 
