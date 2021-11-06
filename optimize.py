@@ -4,7 +4,7 @@ from lib.import_data import *
 from lib.indicators import *
 from lib.strategy import *
 from lib.print_data import *
-import multiprocessing
+import time
 
 # Start timing code.
 t0 = time.time()
@@ -12,7 +12,8 @@ t0 = time.time()
 # Indicator variable values.
 # SMA length.
 sma1_ln_ini = 8
-sma2_ln_ini = 200
+sma2_ln_ini = 34
+sma3_ln_ini = 200
 # BB sma length, std length, and std multiplier.
 bb_sma_ln_ini = 14
 bb_std_ln_ini = 14
@@ -34,6 +35,7 @@ data = get_data()
 # Non iterative values.
 sma1 = sma(data, sma1_ln_ini)
 sma2 = sma(data, sma2_ln_ini)
+sma3 = sma(data, sma3_ln_ini)
 bb_upr = bb(data, 'upr', bb_sma_ln_ini, bb_std_ln_ini, bb_std_mul_ini)
 bb_lwr = bb(data, 'low', bb_sma_ln_ini, bb_std_ln_ini, bb_std_mul_ini)
 kc_upr = kc(data, 'upr', kc_sma_ln_ini, kc_atr_ln_ini, kc_atr_mul_ini)

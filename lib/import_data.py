@@ -14,6 +14,6 @@ def get_data(data_src_type=data_src_type , data_src_folder=data_src_folder, tckr
         data_temp = yf.download(tckr, yh_data_strt_dt, yh_data_end_dt)
         return data_temp
 
-def get_volitility_data(tckr=tckr_volitlity):
-    data_temp = pd.read_csv('historical_data/1day/' + tckr + '.csv' , index_col = ['Date'])
+def get_volitility_data(spec_data, tckr=tckr_volitlity):
+    data_temp = pd.read_csv('historical_data/1day/' + tckr + '.csv' , index_col = ['Date'], usecols=['Date',spec_data])
     return data_temp

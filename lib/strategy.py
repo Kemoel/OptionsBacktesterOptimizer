@@ -3,12 +3,12 @@ from lib.print_data import *
 from lib.indicators import *
 import pandas as pd
 
-def jfc_trade_enter(data, momentum, sqz_sig, bs_sig):
+def jfc_trade_enter(data, sma3, momentum, sqz_sig, bs_sig):
     momentum[momentum['momentum'] > 0] = 1
     momentum[momentum['momentum'] < 0] = -1
     enter_data = pd.DataFrame(index = data.index, columns = ['enter signal']).fillna(0)
-    enter_data.at[(momentum['momentum'] > 0) & (sqz_sig['sqz signal'] == 1) & (bs_sig['bs signal'] > 0), 'enter signal'] = 1 # Long enter
-    enter_data.at[(momentum['momentum'] < 0) & (sqz_sig['sqz signal'] == 1) & (bs_sig['bs signal'] < 0), 'enter signal'] = -1 # Short enter
+    enter_data.at[(momentum['momentum'] > 0) & (sqz_sig['sqz signal'] == 1) & (sqz_sig['sqz signal'].shift(sqz_strat_ln) == 1) & (bs_sig['bs signal'] > 0) & (data[spec_data] > sma3['sma']), 'enter signal'] = 1 # Long enter
+    enter_data.at[(momentum['momentum'] < 0) & (sqz_sig['sqz signal'] == 1) & (sqz_sig['sqz signal'].shift(sqz_strat_ln) == 1) & (bs_sig['bs signal'] < 0) & (data[spec_data] < sma3['sma']), 'enter signal'] = -1 # Short enter
     return enter_data
 
 def jfc_trade_exit(data, sma1, sma2, spec_data=spec_data):
@@ -19,8 +19,8 @@ def jfc_trade_exit(data, sma1, sma2, spec_data=spec_data):
     exit_data.at[(data[spec_data] < kc_lwr_lim_exit['kc']) | ((sma1['sma'] < sma2['sma']) & (data[spec_data] > sma2['sma'])) , 'exit signal'] = -1 # Short take gain and loss
     return exit_data
 
-def jfc_trade_strat(data, sma1, sma2, momentum, sqz_sig, bs_sig, spec_data=spec_data):
-    trd_entr = jfc_trade_enter(data, momentum, sqz_sig, bs_sig)
+def jfc_trade_strat(data, sma1, sma2, sma3, momentum, sqz_sig, bs_sig, spec_data=spec_data):
+    trd_entr = jfc_trade_enter(data, sma3, momentum, sqz_sig, bs_sig)
     trd_ext = jfc_trade_exit(data, sma1, sma2)
     trade_data = pd.DataFrame(index = data.index, columns = ['trade enter price' ,'trade exit price', 'trade loc/typ', 'stock price']).fillna(0)
     trade_data.at[trd_entr['enter signal'] == 1, 'trade enter price'] = data[spec_data] * (1) # Long
