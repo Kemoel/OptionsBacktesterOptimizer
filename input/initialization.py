@@ -1,5 +1,5 @@
 # Ticker name all caps.
-tckr = 'QQQ'
+tckr = 'SPY'
 # Data source folder.
 data_src_folder = '1day'
 # Data source type csv, txt, or yf.

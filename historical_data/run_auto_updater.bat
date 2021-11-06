@@ -1,1 +1,1 @@
-powershell -NoExit -Command "& {&'conda' activate trading}"; "&{&'python' auto_updater.py}"
+powershell -Command "& {&'conda' activate trading}"; "&{&'python' auto_updater.py}"
