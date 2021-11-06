@@ -8,13 +8,15 @@ for filename in os.listdir(directory):
     tckr = filename.replace('.csv', '')
     if (filename.endswith(".csv")):
         # Read last date of csv.
-        with open('1day/'+filename, "r", encoding="utf-8", errors="ignore") as scraped:
-                final_date = pd.to_datetime(scraped.readlines()[-1][0:10])
+        data_temp = pd.read_csv(directory + '/' + tckr + '.csv' , index_col = ['Date'])
+        # with open('1day/'+filename, "r", encoding="utf-8", errors="ignore") as scraped:
+        #         final_date = pd.to_datetime(scraped.readlines()[-1][0:10])
+        print(data_temp)
         # Get missing days from yahoo.
-        data_temp = yf.download(tckr, final_date + pd.offsets.Day(1))
-        # Append data to csv.
-        with open('1day/'+filename,'a', encoding="utf-8", errors="ignore") as f:
-            data_temp.to_csv(f, mode='a', header=False, line_terminator='\n')
+        # data_temp = yf.download(tckr, final_date + pd.offsets.Day(1))
+        # # Append data to csv.
+        # with open('1day/'+filename,'a', encoding="utf-8", errors="ignore") as f:
+        #     data_temp.to_csv(f, mode='a', header=False, line_terminator='\n')
 
 print(directory)
 for tckr in (os.listdir(directory)):
