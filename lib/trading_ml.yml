@@ -1,0 +1,21 @@
+name: trading_ml
+channels:
+  - defaults
+dependencies:
+  - python=3.7
+  - numpy
+  - toolz
+  - matplotlib
+  - pandas
+  - pandas-datareader
+  - sympy
+  - keras
+  - pip:
+    - yfinance
+    - ibapi
+    - finta  
+    - gym
+    - gym-anytrading
+    - stable-baselines
+    - tensorflow==1.15
+    - tensorflow-gpu==1.15

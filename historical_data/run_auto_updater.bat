@@ -1,1 +1,1 @@
-powershell -Command "& {&'conda' activate trading}"; "&{&'python' auto_updater.py}"
+powershell -Command "& {&'conda' activate trading}"; "&{&'python' D:\Code\trading_source\historical_data\auto_updater.py}"

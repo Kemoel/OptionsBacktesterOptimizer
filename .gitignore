@@ -1,3 +1,5 @@
 historical_data/bid_ask_1min
 historical_data/options
 historical_data/1min
+.*
+!/.gitignore

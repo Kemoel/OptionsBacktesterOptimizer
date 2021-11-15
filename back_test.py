@@ -4,6 +4,10 @@ from lib.import_data import *
 from lib.indicators import *
 from lib.strategy import *
 from lib.print_data import *
+import sys
+
+# Input variables
+# option_flg = sys.argv[1]
 
 # Beggining of timer.
 # t0 = time.time()
@@ -39,12 +43,12 @@ sqz_sig = sqz(data, bb_upr, bb_lwr, kc_upr, kc_lwr)
 bs_sig = bs_rng(data, sma1, sma2)
 
 # Strategy entry exit calculations dataframe.
-trd_data = jfc_trade_strat(data, sma1, sma2, sma3, momentum, sqz_sig, bs_sig)
+trd_data = trade_strat(data, sma1, sma2, sma3, momentum, sqz_sig, bs_sig)
 
  # Test if there are trades in range and return account info. If not return 0 for return.
 if(trd_data['trade loc/typ'].loc[strt_dt:end_dt].any()):
     # Trade value dataframe solved for specified dates.
-    acnt_val_data, trd_ln, prf_los_per_trd_call, prf_los_per_trd_put = acnt_val(data, trd_data)
+    acnt_val_data, trd_ln, prf_los_per_trd_long, prf_los_per_trd_short = acnt_val(data, trd_data)
     # Return percentage for account for dates specified.
     acnt_end_val_p, acnt_end_val_year_p = acnt_end_p(acnt_val_data)
     # Std for account for dates specified.
@@ -63,4 +67,4 @@ shrp_rt = shrp_ratio(acnt_end_val_p, ref_return_val_p, acnt_end_val_std)
 # print(time.time()-t0)
 
 # Graph out all required indicators.
-prt_grph(data, trd_data, acnt_val_data, acnt_end_val_p, acnt_end_val_year_p, sma1, sma2, sma3, ema1, bb_upr, bb_lwr, kc_upr, kc_lwr, trd_ln, prf_los_per_trd_call, prf_los_per_trd_put)
+prt_grph(data, trd_data, acnt_val_data, acnt_end_val_p, acnt_end_val_year_p, sma1, sma2, sma3, ema1, bb_upr, bb_lwr, kc_upr, kc_lwr, trd_ln, prf_los_per_trd_long, prf_los_per_trd_short)

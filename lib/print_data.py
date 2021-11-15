@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-def prt_grph(data, trd_data, acnt_val_data, acnt_end_val_p, acnt_end_val_year_p, sma1, sma2, sma3, ema1, bb_upr, bb_lwr, kc_upr, kc_lwr, trd_ln, prf_los_per_trd_call, prf_los_per_trd_put, tckr=tckr, strt_dt=strt_dt, end_dt=end_dt, spec_data=spec_data, prc_flg=True, sma_flg=True, ema_flg=False, bb_flg=True, kc_flg=True, acnt_val_flg=True):
+def prt_grph(data, trd_data, acnt_val_data, acnt_end_val_p, acnt_end_val_year_p, sma1, sma2, sma3, ema1, bb_upr, bb_lwr, kc_upr, kc_lwr, trd_ln, prf_los_per_trd_long, prf_los_per_trd_short, tckr=tckr, strt_dt=strt_dt, end_dt=end_dt, spec_data=spec_data, prc_flg=True, sma_flg=True, ema_flg=False, bb_flg=True, kc_flg=True, acnt_val_flg=True):
     fig, (ax1, ax2) = plt.subplots(nrows = 2, ncols = 1, figsize=(16,9), facecolor='lightgrey', gridspec_kw={'height_ratios': [3, 1], 'wspace':0, 'hspace':0}, sharex=True)
     if prc_flg == True:
         ax1.plot(pd.to_datetime(data.loc[strt_dt:end_dt].index), data.loc[strt_dt:end_dt, spec_data], label = ('Price '+spec_data))
@@ -38,20 +38,20 @@ def prt_grph(data, trd_data, acnt_val_data, acnt_end_val_p, acnt_end_val_year_p,
     ax1.text(0.3, 0.9,'Total time: '+str(years)+' years '+str(months)+' months '+ str(days) +' days'+'\n'
                         'Average trade length: '+str(round(np.mean(trd_ln),2))+' days'+'\n'
                         'Max/Min trade length: '+str(round(np.max(trd_ln),2))+' days : '+str(round(np.min(trd_ln),2))+' days''\n'
-                        'Average profit/loss per trade: '+str("{:,}".format(round(np.mean(prf_los_per_trd_call+prf_los_per_trd_put)*100,2)))+'%'+'\n'
-                        'Max/Min profit/loss per trade: '+str("{:,}".format(round(np.max(prf_los_per_trd_call+prf_los_per_trd_put)*100,2)))+'% : '+str("{:,}".format(round(np.min(prf_los_per_trd_call+prf_los_per_trd_put)*100,2)))+'%'+'\n'
-                        'Number of trades: '+str(len(prf_los_per_trd_call+prf_los_per_trd_put))+'\n'
-                        'Percent of trades profitable/unprofitable: '+str("{:,}".format(round(len(list(filter(lambda i: i > 0, prf_los_per_trd_call+prf_los_per_trd_put)))/len(prf_los_per_trd_call+prf_los_per_trd_put)*100,2)))+'% : '+str("{:,}".format(round(len(list(filter(lambda i: i <= 0, prf_los_per_trd_call+prf_los_per_trd_put)))/len(prf_los_per_trd_call+prf_los_per_trd_put)*100,2)))+'%',
+                        'Average profit/loss per trade: '+str("{:,}".format(round(np.mean(prf_los_per_trd_long+prf_los_per_trd_short)*100,2)))+'%'+'\n'
+                        'Max/Min profit/loss per trade: '+str("{:,}".format(round(np.max(prf_los_per_trd_long+prf_los_per_trd_short)*100,2)))+'% : '+str("{:,}".format(round(np.min(prf_los_per_trd_long+prf_los_per_trd_short)*100,2)))+'%'+'\n'
+                        'Number of trades: '+str(len(prf_los_per_trd_long+prf_los_per_trd_short))+'\n'
+                        'Percent of trades profitable/unprofitable: '+str("{:,}".format(round(len(list(filter(lambda i: i > 0, prf_los_per_trd_long+prf_los_per_trd_short)))/len(prf_los_per_trd_long+prf_los_per_trd_short)*100,2)))+'% : '+str("{:,}".format(round(len(list(filter(lambda i: i <= 0, prf_los_per_trd_long+prf_los_per_trd_short)))/len(prf_los_per_trd_long+prf_los_per_trd_short)*100,2)))+'%',
                         ha='left', va='center', transform=ax1.transAxes, bbox=props, fontsize=7)               
-    ax1.text(0.5, 0.9,'Average call profit/loss per trade: '+str("{:,}".format(round(np.mean(prf_los_per_trd_call)*100,2)))+'%'+'\n'
-                        'Max/Min call profit/loss per trade: '+str("{:,}".format(round(np.max(prf_los_per_trd_call)*100,2)))+'% : '+str("{:,}".format(round(np.min(prf_los_per_trd_call)*100,2)))+'%'+'\n'
-                        'Number of call trades: '+str(len(prf_los_per_trd_call))+'\n'
-                        'Percent of call trades profitable/unprofitable: '+str("{:,}".format(round(len(list(filter(lambda i: i > 0, prf_los_per_trd_call)))/len(prf_los_per_trd_call)*100,2)))+'% : '+str("{:,}".format(round(len(list(filter(lambda i: i <= 0, prf_los_per_trd_call)))/len(prf_los_per_trd_call)*100,2)))+'%',
+    ax1.text(0.5, 0.9,'Average call profit/loss per trade: '+str("{:,}".format(round(np.mean(prf_los_per_trd_long)*100,2)))+'%'+'\n'
+                        'Max/Min call profit/loss per trade: '+str("{:,}".format(round(np.max(prf_los_per_trd_long)*100,2)))+'% : '+str("{:,}".format(round(np.min(prf_los_per_trd_long)*100,2)))+'%'+'\n'
+                        'Number of call trades: '+str(len(prf_los_per_trd_long))+'\n'
+                        'Percent of call trades profitable/unprofitable: '+str("{:,}".format(round(len(list(filter(lambda i: i > 0, prf_los_per_trd_long)))/len(prf_los_per_trd_long)*100,2)))+'% : '+str("{:,}".format(round(len(list(filter(lambda i: i <= 0, prf_los_per_trd_long)))/len(prf_los_per_trd_long)*100,2)))+'%',
                         ha='left', va='center', transform=ax1.transAxes, bbox=props, fontsize=7)
-    ax1.text(0.75, 0.9,'Average put profit/loss per trade: '+str("{:,}".format(round(np.mean(prf_los_per_trd_put)*100,2)))+'%'+'\n'
-                        'Max/Min put profit/loss per trade: '+str("{:,}".format(round(np.max(prf_los_per_trd_put)*100,2)))+'% : '+str("{:,}".format(round(np.min(prf_los_per_trd_put)*100,2)))+'%'+'\n'
-                        'Number of put trades: '+str(len(prf_los_per_trd_put))+'\n'
-                        'Percent of put trades profitable/unprofitable: '+str("{:,}".format(round(len(list(filter(lambda i: i > 0, prf_los_per_trd_put)))/len(prf_los_per_trd_put)*100,2)))+'% : '+str("{:,}".format(round(len(list(filter(lambda i: i <= 0, prf_los_per_trd_put)))/len(prf_los_per_trd_put)*100,2)))+'%',
+    ax1.text(0.75, 0.9,'Average put profit/loss per trade: '+str("{:,}".format(round(np.mean(prf_los_per_trd_short)*100,2)))+'%'+'\n'
+                        'Max/Min put profit/loss per trade: '+str("{:,}".format(round(np.max(prf_los_per_trd_short)*100,2)))+'% : '+str("{:,}".format(round(np.min(prf_los_per_trd_short)*100,2)))+'%'+'\n'
+                        'Number of put trades: '+str(len(prf_los_per_trd_short))+'\n'
+                        'Percent of put trades profitable/unprofitable: '+str("{:,}".format(round(len(list(filter(lambda i: i > 0, prf_los_per_trd_short)))/len(prf_los_per_trd_short)*100,2)))+'% : '+str("{:,}".format(round(len(list(filter(lambda i: i <= 0, prf_los_per_trd_short)))/len(prf_los_per_trd_short)*100,2)))+'%',
                         ha='left', va='center', transform=ax1.transAxes, bbox=props, fontsize=7)         
     # Formating plots and figure.
     plt.get_current_fig_manager().set_window_title(tckr+' Data')

@@ -13,8 +13,8 @@ spec_data = 'Adj Close'
 
 # Indicator variable values.
 # SMA length.
-sma1_ln_ini = 5
-sma2_ln_ini = 50
+sma1_ln_ini = 8
+sma2_ln_ini = 200
 sma3_ln_ini = 300
 # EMA length.
 ema1_ln_ini = 21
@@ -25,7 +25,7 @@ bb_std_mul_ini = 2
 # KC sma length, atr length, and atr multiplier. For sqz.
 kc_sma_ln_ini = 3
 kc_atr_ln_ini = 14
-kc_atr_mul_ini = 2
+kc_atr_mul_ini = 1.5
 # KC sma length, atr length, and atr multiplier. For strat exit.
 kc_sma_ln_exit = 14
 kc_atr_ln_exit = 14

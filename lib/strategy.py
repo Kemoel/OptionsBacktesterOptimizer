@@ -19,7 +19,7 @@ def jfc_trade_exit(data, sma1, sma2, spec_data=spec_data):
     exit_data.at[(data[spec_data] < kc_lwr_lim_exit['kc']) | ((sma1['sma'] < sma2['sma']) & (data[spec_data] > sma2['sma'])) , 'exit signal'] = -1 # Short take gain and loss
     return exit_data
 
-def jfc_trade_strat(data, sma1, sma2, sma3, momentum, sqz_sig, bs_sig, spec_data=spec_data):
+def trade_strat(data, sma1, sma2, sma3, momentum, sqz_sig, bs_sig, spec_data=spec_data):
     trd_entr = jfc_trade_enter(data, sma3, momentum, sqz_sig, bs_sig)
     trd_ext = jfc_trade_exit(data, sma1, sma2)
     trade_data = pd.DataFrame(index = data.index, columns = ['trade enter price' ,'trade exit price', 'trade loc/typ', 'stock price']).fillna(0)

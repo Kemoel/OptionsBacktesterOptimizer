@@ -38,16 +38,17 @@ def acnt_val(data, trd_data, strt_dt=strt_dt, end_dt=end_dt, end_open_pos_flg=0)
         account_value.at[open_dt.index[-1],'stock price'] = 0
         open_dt = open_dt.drop(open_dt.index[-1])
     # Cumalitive addition of trades and profit/loss. Fast and slow options availible.
-    # account_value_full= acnt_val_cumsum_max_fast(data, spec_data, account_value)
+    # account_value_full, avg_trd_ln, prf_los_per_trd_long, prf_los_per_trd_short = acnt_val_cumsum_max_fast(data, spec_data, account_value)
 
-    account_value_full, avg_trd_ln, prf_los_per_trd_call, prf_los_per_trd_put = acnt_val_cumsum_max_options(data, spec_data, account_value)
+    account_value_full, avg_trd_ln, prf_los_per_trd_long, prf_los_per_trd_short = acnt_val_cumsum_max_options(data, spec_data, account_value)
 
     # print_all(account_value)
-    return account_value_full, avg_trd_ln, prf_los_per_trd_call, prf_los_per_trd_put
+    return account_value_full, avg_trd_ln, prf_los_per_trd_long, prf_los_per_trd_short
 
 # Cumalitave addition on trade gain and loss. Maximized contracts. Slower dataframe code.
 def acnt_val_cumsum_max(data, spec_data, account_value):
     num_contract = 0
+    trd_ln = []
     for i in range(1,len(account_value)):
         # Opening trade
         if ((account_value.iat[i,0] != 0) & (num_contract == 0)):
@@ -90,7 +91,7 @@ def acnt_val_cumsum_max_fast(data_df, spec_data, account_value_df):
         elif ((account_value_arr[i,stk_prc_idx] != 0) & (num_contract != 0)): 
             account_value_arr[i,csh_blc_idx] = account_value_arr[i-1,csh_blc_idx] + (account_value_arr[i,stk_prc_idx] * num_contract)
             account_value_arr[i,pos_val_idx] = 0
-            num_contract = 0 
+            num_contract = 0
         # No trade
         else :
             if (num_contract != 0):
@@ -99,7 +100,6 @@ def acnt_val_cumsum_max_fast(data_df, spec_data, account_value_df):
     account_value_df = pd.DataFrame(data = account_value_arr, index = account_value_df.index, columns = account_value_df.columns)
     account_value_df['account value'] = account_value_df['cash balance'] + account_value_df['position value']
     return account_value_df
-
 # Account perecent return for specified dates.
 def acnt_end_p(acnt_val_data):
     acnt_end_val_p = acnt_val_data.iat[-1,acnt_val_data.columns.get_loc('account value')]/strt_blnc-1

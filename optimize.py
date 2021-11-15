@@ -43,7 +43,7 @@ kc_lwr = kc(data, 'low', kc_sma_ln_ini, kc_atr_ln_ini, kc_atr_mul_ini)
 momentum = momen(data, momemtum_ln_ini)
 sqz_sig = sqz(data, bb_upr, bb_lwr, kc_upr, kc_lwr)
 bs_sig = bs_rng(data, sma1, sma2)
-trd_data = jfc_trade_strat(data, sma1, sma2, momentum, sqz_sig, bs_sig)
+trd_data = trade_strat(data, sma1, sma2, momentum, sqz_sig, bs_sig)
 
 # Optimizing sma1 and sma2 between range.
 def optimizer_loop():
@@ -61,7 +61,7 @@ def back_test_loop(kc_sma_ln_ini, kc_atr_ln_ini):
     kc_upr = kc(data, 'upr', kc_sma_ln_ini, kc_atr_ln_ini, kc_atr_mul_ini)
     kc_lwr = kc(data, 'low', kc_sma_ln_ini, kc_atr_ln_ini, kc_atr_mul_ini)
     sqz_sig = sqz(data, bb_upr, bb_lwr, kc_upr, kc_lwr)
-    trd_data = jfc_trade_strat(data, sma1, sma2, momentum, sqz_sig, bs_sig)
+    trd_data = trade_strat(data, sma1, sma2, momentum, sqz_sig, bs_sig)
     # Test if there are trades in range and return account info. If not return 0 for return.
     if(trd_data['trade loc/typ'].loc[strt_dt:end_dt].any()):
         acnt_val_data = acnt_val(data, trd_data)

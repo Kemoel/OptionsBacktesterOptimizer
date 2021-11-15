@@ -6,15 +6,11 @@ dependencies:
   - numpy
   - toolz
   - matplotlib
-  - dill
   - pandas
   - pandas-datareader
-  - seaborn
-  - partd
-  - bokeh
-  - numba
   - sympy
+  - flask
+  - colorama
   - pip:
     - yfinance
     - ibapi
-    - pulp
