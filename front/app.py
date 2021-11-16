@@ -10,7 +10,7 @@ def transform(text_file_contents):
 
 @app.route('/')
 def home():
-   return flask.render_template('page.html')
+   return flask.render_template('index.html')
 
 # @app.route('/', methods=['POST'])
 # def handle_data():
@@ -20,11 +20,10 @@ def home():
 
 @app.route('/get_csv', methods=["GET","POST"])
 def get_csv():
-   csv_dir  = ".\static"
+   csv_dir  = "./historical_data"+"/1day"
    csv_file = flask.request.form.get('csv_name')
-   csv_path = os.path.join(csv_dir, csv_file+'.csv')
+   csv_path = os.path.join(os.path.dirname(os.getcwd()), csv_dir, csv_file+'.csv')
    return flask.send_file(csv_path, as_attachment=True, attachment_filename=csv_file)
-
 
 if __name__ == "__main__":
    app.run()
