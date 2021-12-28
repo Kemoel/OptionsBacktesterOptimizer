@@ -2,7 +2,7 @@ name: trading_ml
 channels:
   - defaults
 dependencies:
-  - python=3.7
+  - python=3.9
   - numpy
   - toolz
   - matplotlib
@@ -17,5 +17,7 @@ dependencies:
     - gym
     - gym-anytrading
     - stable-baselines
-    - tensorflow==1.15
-    - tensorflow-gpu==1.15
+    - tensorflow
+    - tensorflow-gpu  
+    - sklearn
+    - h5py

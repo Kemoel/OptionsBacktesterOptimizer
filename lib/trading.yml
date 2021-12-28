@@ -13,4 +13,5 @@ dependencies:
   - colorama
   - pip:
     - yfinance
-    - ibapi
+    - ibapi 
+    - radian

@@ -60,7 +60,7 @@ tckr_volitlity = '^VIX'
 # Percent of underlying price. + in the money, - out the money.
 delta_strike = -0.01
 # Years to expiry.
-time_exp = 1/12
+time_exp = 3/12
 # Risk free interest rate.
 interest_rate = rf_i 
 # Dividend of underlying.
