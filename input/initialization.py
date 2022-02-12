@@ -48,9 +48,9 @@ d_per_y = 365
 d_per_m = 30
 
 # Starting balance.
-strt_blnc = 10000
+strt_blnc = 100000
 # Starting date for testing.
-strt_dt = '1994-01-01'
+strt_dt = '1996-01-01'
 # End date for testing.
 end_dt = '2021-10-10'
 
@@ -60,7 +60,7 @@ tckr_volitlity = '^VIX'
 # Percent of underlying price. + in the money, - out the money.
 delta_strike = -0.01
 # Years to expiry.
-time_exp = 3/12
+time_exp = 12/12
 # Risk free interest rate.
 interest_rate = rf_i 
 # Dividend of underlying.
@@ -70,7 +70,7 @@ volitility_con = 0.16
 # Percent of account used on each trade.
 prcnt_acnt_use_options = 0.2
 # Loss of value allowed on contract
-loss_allow = 0.5
+loss_allow = 0.1
 
 # Trading fees.
 trd_fee_per_order_buy = 0
