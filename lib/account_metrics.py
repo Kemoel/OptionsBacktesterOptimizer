@@ -107,8 +107,8 @@ def acnt_end_p(acnt_val_data):
     return acnt_end_val_p, acnt_end_val_year_p 
 
 # Account return standard deviation for specified days.
-def acnt_end_std(acnt_val_data):
-    acnt_std_val_p = (acnt_val_data['account value']-strt_blnc).std()
+def acnt_daily_return_std(acnt_val_data):
+    acnt_std_val_p = (acnt_val_data['account value'].pct_change()).std()
     return acnt_std_val_p
 
 # Account return sharpe ratio for specified days vs specified refrence ticker.

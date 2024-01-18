@@ -53,7 +53,7 @@ def main():
         # Return percentage for account for dates specified.
         acnt_end_val_p, acnt_end_val_year_p = acnt_end_p(acnt_val_data)
         # Std for account for dates specified.
-        acnt_end_val_std = acnt_end_std(acnt_val_data)
+        acnt_daily_return_val_std = acnt_daily_return_std(acnt_val_data)
     else:
         acnt_end_val_p = 0
         acnt_end_val_std = 0
@@ -61,14 +61,16 @@ def main():
 
     # Return percentage for refrence ticker for dates specified.
     ref_return_val_p = ref_rtrn(ref_tckr)
+    
     # Sharpe ratio for account for dates specified.
-    shrp_rt = shrp_ratio(acnt_end_val_p, ref_return_val_p, acnt_end_val_std)
+    shrp_rt = shrp_ratio(acnt_end_val_p, ref_return_val_p, acnt_daily_return_val_std)
+    print(acnt_end_val_p, ref_return_val_p, acnt_daily_return_val_std)
 
     # Print time taken.
     # print(time.time()-t0)
 
     # Graph out all required indicators.
-    prt_grph(data, trd_data, acnt_val_data, acnt_end_val_p, acnt_end_val_year_p, sma1, sma2, sma3, ema1, bb_upr, bb_lwr, kc_upr, kc_lwr, trd_ln, prf_los_per_trd_long, prf_los_per_trd_short)
+    prt_grph(data, trd_data, acnt_val_data, acnt_end_val_p, acnt_end_val_year_p, sma1, sma2, sma3, ema1, bb_upr, bb_lwr, kc_upr, kc_lwr, trd_ln, prf_los_per_trd_long, prf_los_per_trd_short, acnt_daily_return_val_std, shrp_rt)
 
 if __name__ == "__main__":
     main()
