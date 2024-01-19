@@ -1,8 +1,8 @@
-# Gym stuff
+# Gym
 import gym
 import gym_anytrading
 
-# Stable baselines - rl stuff
+# Stable baselines - rl
 from stable_baselines.common.vec_env import DummyVecEnv
 from stable_baselines import A2C
 
